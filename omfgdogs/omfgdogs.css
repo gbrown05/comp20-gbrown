@@ -1,0 +1,14 @@
+body {
+	background-image: url("omfgdogs.gif");
+}
+
+.bottomleft {
+	position: absolute;
+	text-align: right;
+	bottom: 0;
+	right: 0;
+	color: white;
+	font-family: arial;
+	font-size: 20px;
+	text-decoration: none;
+}
