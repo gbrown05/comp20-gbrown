@@ -1,14 +1,37 @@
-body {
-	background-image: url("omfgdogs.gif");
+@media only screen and (min-width: 992px) {
+
+	body {
+		background-image: url("omfgdogs.gif");
+		font-size: 0;
+		color: white;
+	}
+
+	.bottomleft {
+		position: absolute;
+		text-align: right;
+		bottom: 0;
+		right: 0;
+		color: white;
+		font-family: arial;
+		font-size: 30px;
+		text-decoration: none;
+	}
+
+	.bottomleft a:link {
+		color: white;
+	}
 }
 
-.bottomleft {
-	position: absolute;
-	text-align: right;
-	bottom: 0;
-	right: 0;
-	color: white;
-	font-family: arial;
-	font-size: 20px;
-	text-decoration: none;
+
+@media only screen and (max-width: 991px) {
+	.bottomleft {
+		position: absolute;
+		text-align: right;
+		bottom: 0;
+		right: 0;
+		color: white;
+		font-family: arial;
+		font-size: 30px;
+		text-decoration: none;
+	}
 }
