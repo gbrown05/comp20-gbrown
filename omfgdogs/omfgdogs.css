@@ -19,6 +19,12 @@
 
 	.bottomleft a:link {
 		color: white;
+		text-decoration: none;
+	}
+
+	.bottomleft a:visited {
+		color: white;
+		text-decoration: none;
 	}
 }
 
@@ -32,6 +38,15 @@
 		color: white;
 		font-family: arial;
 		font-size: 30px;
+	}
+
+	.bottomleft a:link {
+		color: black;
+		text-decoration: none;
+	}
+
+	.bottomleft a:visited {
+		color: black;
 		text-decoration: none;
 	}
 }
