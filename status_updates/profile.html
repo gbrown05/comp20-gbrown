@@ -9,26 +9,30 @@
 	<script>
 	function statusUpdate()
 	{
+		//First, get the message and date/time
 		var message = document.getElementById("msg").value;
-		var date = new Date(); //get days and shit
+		var date = new Date();
 		var month = date.getMonth() + 1;
 		var day = date.getDate();
 		var year = date.getFullYear();
 		var hour = date.getHours();
 		var minute = date.getMinutes();
-		var goodDate = month + "/" + day + "/" + year + " " + hour + ":" + minute;
+		if (minute < 10) {
+			minute = "0" + minute;
+		}
+		var goodDate = month + "/" + day + "/" + year + " " + 
+			hour + ":" + minute;
 		var toPrint = goodDate + " - " + message;
 
+		//Now, create paragraph that will be added
 		var paragraph = document.createElement("p");
-		//var empty = document.createElement("blankline");
 		var update = document.createTextNode(toPrint);
-		//var newline = document.createTextNode("\n");
 
 		paragraph.appendChild(update);
-		//empty.appendChild(newline);
 
-		document.getElementById("status").insertBefore(paragraph, document.getElementById("status").firstChild);
-		//document.getElementById("status").insertBefore(empty, document.getElementById("status").firstChild);
+		//Finally, add the update at the top of the "status" div
+		document.getElementById("status").insertBefore(paragraph, 
+			document.getElementById("status").firstChild);
 	}
 	</script> 
 
