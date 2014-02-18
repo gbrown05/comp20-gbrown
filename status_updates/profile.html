@@ -4,7 +4,29 @@
 <html>
 
 <head>
-<title>Fecesbook</title>
+	<title>Fecesbook</title>
+	
+	<script>
+	var message = document.getElementsById("msg").value;
+	var date = new Date(); //get days and shit
+	var month = date.getMonth() + 1;
+	var day = date.getDate();
+	var year = date.getFullYear();
+	var hour = date.getHours();
+	var minute = date.getMinutes();
+	var goodDate = month + "/" + day + "/" + year + " " + hour + ":" + minute;
+	var toPrint = goodDate + " - " + message;
+
+	var paragraph = document.createElement("p");
+	var update = document.createTextNode(toPrint);
+
+	paragraph.appendChild(update);
+
+	document.getElementsById("status").insertBefore(paragraph, document.getElementsById("status").firstChild);
+		alert(toPrint);
+	</script> 
+
+
 </head>
 
 <body>
