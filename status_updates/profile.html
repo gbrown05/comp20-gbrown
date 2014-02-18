@@ -7,23 +7,27 @@
 	<title>Fecesbook</title>
 	
 	<script>
-	var message = document.getElementsById("msg").value;
-	var date = new Date(); //get days and shit
-	var month = date.getMonth() + 1;
-	var day = date.getDate();
-	var year = date.getFullYear();
-	var hour = date.getHours();
-	var minute = date.getMinutes();
-	var goodDate = month + "/" + day + "/" + year + " " + hour + ":" + minute;
-	var toPrint = goodDate + " - " + message;
+	function statusUpdate()
+	{
+		var message = document.getElementById("msg").value;
+		var date = new Date(); //get days and shit
+		var month = date.getMonth() + 1;
+		var day = date.getDate();
+		var year = date.getFullYear();
+		var hour = date.getHours();
+		var minute = date.getMinutes();
+		var goodDate = month + "/" + day + "/" + year + " " + hour + ":" + minute;
+		var toPrint = goodDate + " - " + message;
 
-	var paragraph = document.createElement("p");
-	var update = document.createTextNode(toPrint);
 
-	paragraph.appendChild(update);
+		var paragraph = document.createElement("paragraph");
+		var update = document.createTextNode(toPrint);
 
-	document.getElementsById("status").insertBefore(paragraph, document.getElementsById("status").firstChild);
-		alert(toPrint);
+		paragraph.appendChild(update);
+
+
+		document.getElementById("status").insertBefore(paragraph, document.getElementById("status").firstChild);
+	}
 	</script> 
 
 
@@ -42,7 +46,7 @@
 		</ul>
 	</div>
 	<h2 id="fullname">Barney Gumble</h2>
-	<h3>What are you thinking about? <input type="text" id="msg" name="msg" size="30" /></h3>
+	<h3>What are you thinking about? <input type="text" id="msg" name="msg" onchange="statusUpdate()" size="30" /></h3>
 	<h3>Updates</h3>
 	<div id="status">
 	</div>
