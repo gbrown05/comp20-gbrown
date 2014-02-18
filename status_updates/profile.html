@@ -19,14 +19,16 @@
 		var goodDate = month + "/" + day + "/" + year + " " + hour + ":" + minute;
 		var toPrint = goodDate + " - " + message;
 
-
-		var paragraph = document.createElement("paragraph");
+		var paragraph = document.createElement("p");
+		//var empty = document.createElement("blankline");
 		var update = document.createTextNode(toPrint);
+		//var newline = document.createTextNode("\n");
 
 		paragraph.appendChild(update);
-
+		//empty.appendChild(newline);
 
 		document.getElementById("status").insertBefore(paragraph, document.getElementById("status").firstChild);
+		//document.getElementById("status").insertBefore(empty, document.getElementById("status").firstChild);
 	}
 	</script> 
 
