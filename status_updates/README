@@ -1,0 +1,9 @@
+Lab 5 -- DOM
+George Brown, 18 February 2014
+
+The page profile.html conforms to the given specifications. It also prints
+leading zeroes for the minutes; for example, 1:02 is printed (not 1:2).
+
+I spent approximately 4 hours on this lab, much of it reading documentation from
+MDN and Stackoverflow. Skyler Tom and Siddhartha Prasad also discussed the lab
+with me. I helped Tom Strassner and Victor Chao.
