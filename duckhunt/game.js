@@ -11,10 +11,14 @@ function draw() {
 		ctx = canvas.getContext("2d");
 		var img = new Image();
 		img.onload = function() {
-			ctx.fillStyle = "87CEEB";
+			sky = "87CEEB";
+			dirt = "C96A1B";
+			ctx.fillStyle = sky;
 			ctx.fillRect(0, 0, 800, 600);
 			
-			ctx.fillStyle = "C96A1B";
+			//extra dirt at bottom of canvas
+
+			ctx.fillStyle = dirt;
 			ctx.fillRect(0, 563, 800, 37);
 			
 			//dirt, grass, 2 bushes
@@ -23,7 +27,13 @@ function draw() {
 			//tree
 			ctx.drawImage(img, 0, 271, 81, 129, 200, 128, 200, 350);
 
+			//dog
+			ctx.drawImage(img, 63, 0, 57, 46, 380, 430, 160, 140);
 
+			//birds are placed at random points in the sky
+			x = Math.floor(Math.random() * 800);
+			y = Math.floor(Math.random() * 400);
+			ctx.drawImage(img, 41, 156, 34, 34, x, y, 70, 70);
 
 		}
 		img.src = "assets/duckhunt.png";
