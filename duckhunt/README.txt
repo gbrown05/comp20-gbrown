@@ -1,6 +1,6 @@
 George Brown, Comp 20, Assignment #2: The beginning of Duckhunt
 
-Currently, this code draws a screen of the Duckhunt game with the required
+This code draws a screen of the Duckhunt game with the required
 objects, including the sky, dirt, bushes, tree, dog, and 5 birds. It uses the 
 sprite sheet (in the assets directory) and the Image class extensively.
 
