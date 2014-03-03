@@ -9,9 +9,24 @@
 			var parsed = JSON.parse(str);
 			table = document.createElement("table");
 
-			table.insertRow(0);
+			row = table.insertRow(0);
+			
+			col = row.insertCell(0);
+			col.innerHTML = "Company";
+			col = row.insertCell(1);
+			col.innerHTML = "Position";
+			col = row.insertCell(2);
+			col.innerHTML = "Job Posting URL";
+			col = row.insertCell(3);
+			col.innerHTML = "Description";
+			col = row.insertCell(4);
+			col.innerHTML = "Requirements";
+			col = row.insertCell(5);
+			col.innerHTML = "Contact";
+			col = row.insertCell(6);
+			col.innerHTML = "Company";
 
-			for (i = 1; i <= 5; i++) {
+			for (i = 1; i <= 6; i++) {
 				rowNum = parsed[i].id - 1;
 				pos = parsed[i].position;
 				company = parsed[i].company;
@@ -25,17 +40,25 @@
 
 				row = table.insertRow(rowNum);
 
+				
+
+				col.innerHTML = company;
+				col = row.insertCell(company);
+				
+				col = row.insertCell(contact);
+				col.innerHTML = contact;
+				
+				
+
+				col = row.insertCell(description);
+				col.innerHTML = description;
+				
+				col = row.insertCell(posting_url);
+				col.innerHTML = posting_url;
+				
 				col = row.insertCell(pos);
 				col.innerHTML = pos;
 
-				col = row.insertCell(company);
-				col.innerHTML = company;
-				col = row.insertCell(thisLocation);
-				col.innerHTML = description;
-				col = row.insertCell(requirements);
-				col.innerHTML = posting_url;
-				col = row.insertCell(contact);
-				col.innerHTML = notes;
 				col = row.insertCell(url);
 				col.innerHTML = url;
 			}
