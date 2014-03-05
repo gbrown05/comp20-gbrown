@@ -18,17 +18,20 @@
 				where = document.createTextNode("Location: " + parsed[i].location);
 
 				para1 = document.createElement("p");
-				//para2 = document.createElement("p");
-				//para3 = document.createElement("p");
-				
+								para2 = document.createElement("p");
+				para3 = document.createElement("p");
+
 				para1.appendChild(pos);
-				para1.appendChild(comp);
-				para1.appendChild(where);
+				para2.appendChild(comp);
+				para3.appendChild(where);
 				doc.appendChild(para1);
-				//doc.appendChild(para2);
-				//doc.appendChild(para3);
-				//para3.appendChild(parsed[i].location);
-			    //para1.appendChild("poop");
+								doc.appendChild(para2);
+
+				doc.appendChild(para3);
+
+				br = document.createElement("br");
+				doc.appendChild(br);
+
 			}
 		}
 
