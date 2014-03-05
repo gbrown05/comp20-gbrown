@@ -1,10 +1,7 @@
 p {
+	font-family: "HelveticaNeue-Light";
+	color: black;
 	padding: 7px;
 	border-color: black;
-	background-color: yellow;
-}
-
-br {
-	border-radius: 5px;
-	border-color: black;
+	background-color: #79EBF7;
 }
