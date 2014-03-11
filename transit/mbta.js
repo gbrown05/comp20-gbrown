@@ -158,7 +158,7 @@ function addStationMarkers()
             flightPlanCoordinates[i] = 
                 new google.maps.LatLng(blueStations[i].lat,blueStations[i].longe);
         }
-        addLines(flightPlanCoordinates);
+        drawLines(flightPlanCoordinates);
     }
 
     else if (parsed.line == "red") {
@@ -172,7 +172,7 @@ function addStationMarkers()
                   new google.maps.LatLng(redStations[i].lat,redStations[i].longe);
             }
         }
-        addLines(flightPlanCoordinates);
+        drawLines(flightPlanCoordinates);
     }
 
     else {
@@ -181,7 +181,7 @@ function addStationMarkers()
             flightPlanCoordinates[i] = 
                 new google.maps.LatLng(orangeStations[i].lat,orangeStations[i].longe);
         }
-        addLines(flightPlanCoordinates);
+        drawLines(flightPlanCoordinates);
     }
 }
 
@@ -205,12 +205,49 @@ function createMarker(station){
 
     google.maps.event.addListener(stationMarker, 'click', function() {
         infowindow.close();
-        infowindow.setContent(station.name);
+        infowindow.setContent(makeTable(station));
         infowindow.open(map, this);
     });
 }
 
-function addLines(flightPlanCoordinates) {
+function makeTable(station) {
+    var content = document.createElement("table");
+    content += "<table><tr><th>Line</th><th>Trip #</th><th>Destination</th><th>Time Remaining</th></tr>";
+    
+    for (var i = 0; i < parsed.schedule.length; i++) {
+
+        content += '<tr><td>' + parsed.line + '</td><td>' + parsed.schedule[i].TripID + '</td><td>' + station.schedule.Destination + '</td><td>' + station.schedule.Predictions.Seconds + '</td></tr>';
+        content += '</table>';
+    }
+        else {
+            content += "<p>No schedule of upcoming trains for this station.</p>";
+        }
+
+
+
+
+
+}
+
+
+
+
+function getArrivalSched(stationName) {
+    var secondsTillArival;
+    var destination;
+
+    for i in parsed.schedule {
+        destination = parsed.schedule.i.Destination;
+        secondsTillArival = parsed.schedule.i.Seconds;
+    }
+
+}
+
+//display marker info 
+
+//addString = "<tr><td>" + line + "</td></tr>"
+
+function drawLines(flightPlanCoordinates) {
 
     var flightPath = new google.maps.Polyline({
     path: flightPlanCoordinates,
@@ -222,11 +259,6 @@ function addLines(flightPlanCoordinates) {
    
     flightPath.setMap(map);
 }
-
-//display marker info 
-
-//addString = "<tr><td>" + line + "</td></tr>"
-
 
 
 
