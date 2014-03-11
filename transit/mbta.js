@@ -149,31 +149,52 @@ function renderMap() {
 
 function addStationMarkers()
 {
+    //Store the coordinates to draw lines
+    var flightPlanCoordinates = [];
+
     if (parsed.line == "blue") {
         for (var i = 0; i < 12; i++) {
             createMarker(blueStations[i]);
+            flightPlanCoordinates[i] = 
+                new google.maps.LatLng(blueStations[i].lat,blueStations[i].longe);
         }
-    } else if (parsed.line == "red") {
+        addLines(flightPlanCoordinates);
+    }
+
+    else if (parsed.line == "red") {
         for (var i = 0; i < 22; i++) {
             createMarker(redStations[i]);
+            
+            //Special case for redline: Don't connect braintree to the other
+            //Ashmont side of the south end of the red line!
+            if (i != 18) {
+                flightPlanCoordinates[i] = 
+                  new google.maps.LatLng(redStations[i].lat,redStations[i].longe);
+            }
         }
-    } else {
+        addLines(flightPlanCoordinates);
+    }
+
+    else {
         for (var i = 0; i < 19; i++) {
             createMarker(orangeStations[i]);
+            flightPlanCoordinates[i] = 
+                new google.maps.LatLng(orangeStations[i].lat,orangeStations[i].longe);
         }
+        addLines(flightPlanCoordinates);
     }
 }
 
 function createMarker(station){
     var stationLoc = new google.maps.LatLng(station.lat, station.longe);
-    var iconSource = "http://maps.google.com/mapfiles/kml/";
+    var iconSource = "http://maps.google.com/mapfiles/kml/paddle/";
     
     if (parsed.line == "blue") {
-        iconSource += "paddle/blu-circle-lv.png";
+        iconSource += "blu-circle-lv.png";
     } else if (parsed.line == "red") {
-        iconSource += "paddle/red-circle-lv.png";
+        iconSource += "red-circle-lv.png";
     } else {
-        iconSource += "shapes/sunny.png";
+        iconSource += "ylw-circle-lv.png";
     }
 
     var stationMarker = new google.maps.Marker({
@@ -189,7 +210,18 @@ function createMarker(station){
     });
 }
 
+function addLines(flightPlanCoordinates) {
 
+    var flightPath = new google.maps.Polyline({
+    path: flightPlanCoordinates,
+    geodesic: true,
+    strokeColor: parsed.line,
+    strokeOpacity: 1.0,
+    strokeWeight: 2
+    });
+   
+    flightPath.setMap(map);
+}
 
 //display marker info 
 
