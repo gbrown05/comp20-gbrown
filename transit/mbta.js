@@ -108,6 +108,7 @@ function callback() {
     } else if (request.status == 500) {
         var errorElem = document.getElementById("mbtamap");
         errorElem.innerHTML = "<h1>Error: Could not load MBTA Map</h>";
+        errorElem.innerHTML += "<p>Try refreshing your browser :)</p>";
     }
 }
 
