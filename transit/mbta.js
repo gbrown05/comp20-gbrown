@@ -149,7 +149,7 @@ function renderMap() {
     
     google.maps.event.addListener(marker, 'click', function() {
         infowindow.setContent("You are here. You are " + (0.621371 * closest.distance) + 
-            " miles from the closest " + parsed.line +" station, which is " + closest.name);
+            " miles from the closest " + parsed.line + " line station, which is " + closest.name);
         infowindow.open(map, marker);
     });
 }
