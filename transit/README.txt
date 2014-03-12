@@ -12,6 +12,10 @@ I collaborated briefly with Siddhartha Prasad regarding the XMLHttpRequest. I
 also spoke about the Haversine formula with Skyler Tom, and helped Nadav
 Gavrielov a little bit with parsing JSON.
 
+I used Ming's examples extensively, and I have tried to document this throughout
+my code. I also used StackOverflow to reference the Haversine formula. The
+Google Maps API and tutorial was very handy as well.
+
 I spent about 12-14 hours on this assignment. But I really have no idea, because
 there were a lot of times that I just opened my computer and worked for a few
 minutes on the assignment.

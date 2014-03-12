@@ -18,11 +18,16 @@ var marker;
 var infowindow = new google.maps.InfoWindow();
 var places;
 var parsed;
+var closest = {"name":"Error","distance":Number.NEGATIVE_INFINITY};
 
 // Station objects contain all stops/locations for blue, orange, and red lines
 var blueStations = new Object();
 var orangeStations = new Object();
 var redStations = new Object();
+
+var NUM_BLUE = 12;
+var NUM_ORANGE = 19;
+var NUM_RED = 22;
 
 blueStations[6] = {"name":"Airport","lat":"42.374262","longe":"-71.030395"};
 blueStations[8] = {"name":"Aquarium","lat":"42.359784","longe":"-71.051652"};
@@ -57,8 +62,8 @@ orangeStations[3] = {"name":"Sullivan","lat":"42.383975","longe":"-71.076994"};
 orangeStations[10] = {"name":"Tufts Medical","lat":"42.349662","longe":"-71.063917"};
 orangeStations[2] = {"name":"Wellington","lat":"42.40237","longe":"-71.077082"};
 
-//Split is for > 12 -- 13 is North Q
-// Then skip to 18, savin hill
+//Split is for stations > 12 -- 13 is North Quincy
+// Then skip to 18, Savin Hill
 redStations[0] = {"name":"Alewife","lat":"42.395428","longe":"-71.142483"};
 redStations[11] = {"name":"Andrew","lat":"42.330154","longe":"-71.057655"};
 redStations[21] = {"name":"Ashmont","lat":"42.284652","longe":"-71.064489"};
@@ -153,17 +158,21 @@ function addStationMarkers()
     var flightPlanCoordinates = [];
 
     if (parsed.line == "blue") {
-        for (var i = 0; i < 12; i++) {
+        for (var i = 0; i < NUM_BLUE; i++) {
             createMarker(blueStations[i]);
             flightPlanCoordinates[i] = 
                 new google.maps.LatLng(blueStations[i].lat,blueStations[i].longe);
+            if (calcDist(blueStations[i]) > closest.distance) {
+                closest.distance = calcDist(blueStations[i]);
+                closest.name = blueStations[i].name;
+            }
         }
         drawLines(flightPlanCoordinates);
     }
 
     else if (parsed.line == "red") {
         var morePlanCoordinates = [];
-        for (var i = 0; i < 22; i++) {
+        for (var i = 0; i < NUM_RED; i++) {
             createMarker(redStations[i]);
             
             // Special case for redline: Don't connect Braintree to the other
@@ -171,28 +180,40 @@ function addStationMarkers()
             if (i < 18) {
                 flightPlanCoordinates[i] = 
                   new google.maps.LatLng(redStations[i].lat,redStations[i].longe);
+                if (calcDist(redStations[i]) > closest.distance) {
+                    closest.distance = calcDist(redStations[i]);
+                    closest.name = redStations[i].name;
+                }
             } else {
                 morePlanCoordinates[i - 17] =
                   new google.maps.LatLng(redStations[i].lat,redStations[i].longe);
+                if (calcDist(redStations[i]) > closest.distance) {
+                    closest.distance = calcDist(redStations[i]);
+                    closest.name = redStations[i].name;
+                }
             }
         }
+        //Savin Hill is at index 1, so add JFK at index 0
         morePlanCoordinates[0] = new google.maps.LatLng(redStations[12].lat,redStations[12].longe);
         drawLines(flightPlanCoordinates);
         drawLines(morePlanCoordinates);
     }
 
     else {
-        for (var i = 0; i < 19; i++) {
+        for (var i = 0; i < NUM_ORANGE; i++) {
             createMarker(orangeStations[i]);
             flightPlanCoordinates[i] = 
                 new google.maps.LatLng(orangeStations[i].lat,orangeStations[i].longe);
+            if (calcDist(orangeStations[i]) > closest.distance) {
+                closest.distance = calcDist(orangeStations[i]);
+                closest.name = orangeStations[i].name;
         }
         drawLines(flightPlanCoordinates);
     }
 }
 
 function drawLines(flightPlanCoordinates) {
-
+    // Use google maps API Polyline object to connect stations with lines
     var flightPath = new google.maps.Polyline({
     path: flightPlanCoordinates,
     geodesic: true,
@@ -205,9 +226,11 @@ function drawLines(flightPlanCoordinates) {
 }
 
 function createMarker(station) {
+    // Will be called on every station on particular line
     var stationLoc = new google.maps.LatLng(station.lat, station.longe);
     var iconSource = "http://maps.google.com/mapfiles/kml/paddle/";
     
+    // Decide whether markers should be blue, red, or yellow/orange
     if (parsed.line == "blue") {
         iconSource += "blu-circle-lv.png";
     } else if (parsed.line == "red") {
@@ -216,15 +239,17 @@ function createMarker(station) {
         iconSource += "ylw-circle-lv.png";
     }
 
+    // Add the marker
     var stationMarker = new google.maps.Marker({
         map: map,
         position: stationLoc,
         icon: iconSource
     });
 
+    // Using the API, add the correct information about upcoming trains to the popup window
     google.maps.event.addListener(stationMarker, 'click', function() {
         infowindow.close();
-        infowindow.setContent(makeTable(station));
+        infowindow.setContent(makeTable(station)); // This gets the information
         infowindow.open(map, this);
     });
 }
@@ -234,6 +259,7 @@ function makeTable(station) {
     content = station.name;
     content += "<table><tr><th>Line</th><th>Trip #</th><th>Destination</th><th>Time Remaining</th></tr>";
 
+    // Now, go through the parsed JSON to get upcoming wait times and desitnations
     for (var i = 0; i < parsed.schedule.length; i++) {
         for (var j = 0; j < parsed.schedule[i].Predictions.length; j++) {
             if (parsed.schedule[i].Predictions[j].Stop == station.name) { 
@@ -244,10 +270,6 @@ function makeTable(station) {
         }
     }
     content += "</table>";
-    if (content == "<table><tr><th>Line</th><th>Trip #</th><th>Destination</th><th>Time Remaining</th></tr></table>") {
-        content = "<p>No schedule of upcoming trains for this station.</p>";
-    }
-
     return content;
 }
 
@@ -262,4 +284,31 @@ function formatSecs(seconds) {
     return minutes + ":" + seconds;
 }
 
+Number.prototype.toRad = function() {
+   return this * Math.PI / 180;
+}
 
+function calcDist(stations) {
+    // With help from StackOverflow question at http://bit.ly/1goDPIX
+    var stationLat = stations.lat;
+    var stationLonge = stations.longe;
+
+    //var lat2 = 42.741; 
+    //var lon2 = -71.3161; 
+    //var lat1 = 42.806911; 
+    //var lon1 = -71.290611; 
+
+    var R = 6371; // km 
+    //has a problem with the .toRad() method below.
+    var x1 = lat2-lat1;
+    var dLat = x1.toRad();  
+    var x2 = lon2-lon1;
+    var dLon = x2.toRad();  
+    var a = Math.sin(dLat/2) * Math.sin(dLat/2) + 
+                    Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) * 
+                    Math.sin(dLon/2) * Math.sin(dLon/2);  
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+    var d = R * c; 
+
+    alert(d);
+}
