@@ -215,18 +215,21 @@ function makeTable(station) {
     content += "<table><tr><th>Line</th><th>Trip #</th><th>Destination</th><th>Time Remaining</th></tr>";
     
     for (var i = 0; i < parsed.schedule.length; i++) {
-
-        content += '<tr><td>' + parsed.line + '</td><td>' + parsed.schedule[i].TripID + '</td><td>' + station.schedule.Destination + '</td><td>' + station.schedule.Predictions.Seconds + '</td></tr>';
-        content += '</table>';
-    }
-        else {
-            content += "<p>No schedule of upcoming trains for this station.</p>";
+        content += '<tr><td>' + parsed.line + '</td><td>' + parsed.schedule[i].TripID + '</td><td>';
+        
+        for (var j = 0; j < parsed.schedule[i].Predictions.length) {
+            if (parsed.schedule[i].Predictions[j].Stop == station.name) { 
+                content += parsed.schedule[i].Destination + '</td><td>' + parsed.schedule[i].Predictions[j].Seconds + '</td></tr>';
+            }
         }
+    }
+    content += '</table>';
+    if (content == "<table><tr><th>Line</th><th>Trip #</th><th>Destination</th><th>Time Remaining</th></tr></table>") {
+        content = document.createElement("p");
+        content = "<p>No schedule of upcoming trains for this station.</p>";
+    }
 
-
-
-
-
+    return content;
 }
 
 
