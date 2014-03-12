@@ -144,10 +144,13 @@ function renderMap() {
     });
 
     marker.setMap(map);
+
+    infowindow.setContent("You are here. You are " + (0.621371 * closest.distance) + 
+    " miles from the closest station, which is " + closest.name);
+    infowindow.open(map, marker);
     
     google.maps.event.addListener(marker, 'click', function() {
-        infowindow.setContent("You are here");
-        infowindow.setContent("You are " + (0.621371 * closest.distance) + 
+        infowindow.setContent("You are here. You are " + (0.621371 * closest.distance) + 
             " miles from the closest station, which is " + closest.name);
         infowindow.open(map, marker);
     });
