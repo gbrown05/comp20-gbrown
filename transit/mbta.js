@@ -1,6 +1,5 @@
-//mbta.js
-//George Brown, Comp 20, 14 March 2014
-//
+// mbta.js
+// George Brown, Comp 20, 14 March 2014
 
 var request = new XMLHttpRequest();
 
@@ -18,7 +17,7 @@ var marker;
 var infowindow = new google.maps.InfoWindow();
 var places;
 var parsed;
-var closest = {"name":"Error","distance":Number.NEGATIVE_INFINITY};
+var closest = {"name":"Error","distance":Number.POSITIVE_INFINITY};
 
 // Station objects contain all stops/locations for blue, orange, and red lines
 var blueStations = new Object();
@@ -134,6 +133,8 @@ function renderMap() {
     me = new google.maps.LatLng(lat, longe);
     map = new google.maps.Map(document.getElementById("mbtamap"), mapOptions);
  
+    addStationMarkers();
+
     map.panTo(me);
 
     marker = new google.maps.Marker({
@@ -146,10 +147,10 @@ function renderMap() {
     
     google.maps.event.addListener(marker, 'click', function() {
         infowindow.setContent("You are here");
+        infowindow.setContent("You are " + (0.621371 * closest.distance) + 
+            " miles from the closest station, which is " + closest.name);
         infowindow.open(map, marker);
     });
-
-    addStationMarkers();
 }
 
 function addStationMarkers()
@@ -162,7 +163,7 @@ function addStationMarkers()
             createMarker(blueStations[i]);
             flightPlanCoordinates[i] = 
                 new google.maps.LatLng(blueStations[i].lat,blueStations[i].longe);
-            if (calcDist(blueStations[i]) > closest.distance) {
+            if (calcDist(blueStations[i]) < closest.distance) {
                 closest.distance = calcDist(blueStations[i]);
                 closest.name = blueStations[i].name;
             }
@@ -180,20 +181,17 @@ function addStationMarkers()
             if (i < 18) {
                 flightPlanCoordinates[i] = 
                   new google.maps.LatLng(redStations[i].lat,redStations[i].longe);
-                if (calcDist(redStations[i]) > closest.distance) {
-                    closest.distance = calcDist(redStations[i]);
-                    closest.name = redStations[i].name;
-                }
             } else {
                 morePlanCoordinates[i - 17] =
                   new google.maps.LatLng(redStations[i].lat,redStations[i].longe);
-                if (calcDist(redStations[i]) > closest.distance) {
-                    closest.distance = calcDist(redStations[i]);
-                    closest.name = redStations[i].name;
-                }
+            }
+
+            if (calcDist(redStations[i]) < closest.distance) {
+                closest.distance = calcDist(redStations[i]);
+                closest.name = redStations[i].name;
             }
         }
-        //Savin Hill is at index 1, so add JFK at index 0
+        //Savin Hill is at index 1, so add JFK to morePlanCoordinates at index 0
         morePlanCoordinates[0] = new google.maps.LatLng(redStations[12].lat,redStations[12].longe);
         drawLines(flightPlanCoordinates);
         drawLines(morePlanCoordinates);
@@ -204,9 +202,10 @@ function addStationMarkers()
             createMarker(orangeStations[i]);
             flightPlanCoordinates[i] = 
                 new google.maps.LatLng(orangeStations[i].lat,orangeStations[i].longe);
-            if (calcDist(orangeStations[i]) > closest.distance) {
+            if (calcDist(orangeStations[i]) < closest.distance) {
                 closest.distance = calcDist(orangeStations[i]);
                 closest.name = orangeStations[i].name;
+            }
         }
         drawLines(flightPlanCoordinates);
     }
@@ -284,31 +283,26 @@ function formatSecs(seconds) {
     return minutes + ":" + seconds;
 }
 
-Number.prototype.toRad = function() {
-   return this * Math.PI / 180;
+function toRad(lat) {
+        return lat * Math.PI / 180;
 }
 
 function calcDist(stations) {
+
     // With help from StackOverflow question at http://bit.ly/1goDPIX
     var stationLat = stations.lat;
     var stationLonge = stations.longe;
 
-    //var lat2 = 42.741; 
-    //var lon2 = -71.3161; 
-    //var lat1 = 42.806911; 
-    //var lon1 = -71.290611; 
-
-    var R = 6371; // km 
-    //has a problem with the .toRad() method below.
-    var x1 = lat2-lat1;
-    var dLat = x1.toRad();  
-    var x2 = lon2-lon1;
-    var dLon = x2.toRad();  
+    var R = 6371; // kilometers
+    var x1 = stationLat-lat;
+    var dLat = toRad(x1);  
+    var x2 = stationLonge-longe;
+    var dLon = toRad(x2);  
     var a = Math.sin(dLat/2) * Math.sin(dLat/2) + 
-                    Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) * 
+                    Math.cos(toRad(lat)) * Math.cos(toRad(stationLat)) * 
                     Math.sin(dLon/2) * Math.sin(dLon/2);  
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
     var d = R * c; 
 
-    alert(d);
+    return d;
 }
