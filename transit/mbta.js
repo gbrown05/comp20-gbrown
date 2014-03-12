@@ -149,7 +149,7 @@ function renderMap() {
 
 function addStationMarkers()
 {
-    //Store the coordinates to draw lines
+    // Store the coordinates to draw lines
     var flightPlanCoordinates = [];
 
     if (parsed.line == "blue") {
@@ -162,17 +162,23 @@ function addStationMarkers()
     }
 
     else if (parsed.line == "red") {
+        var morePlanCoordinates = [];
         for (var i = 0; i < 22; i++) {
             createMarker(redStations[i]);
             
-            //Special case for redline: Don't connect braintree to the other
-            //Ashmont side of the south end of the red line!
-            if (i != 18) {
+            // Special case for redline: Don't connect Braintree to the other
+            // (Ashmont) side of the south end of the red line!
+            if (i < 18) {
                 flightPlanCoordinates[i] = 
+                  new google.maps.LatLng(redStations[i].lat,redStations[i].longe);
+            } else {
+                morePlanCoordinates[i - 17] =
                   new google.maps.LatLng(redStations[i].lat,redStations[i].longe);
             }
         }
+        morePlanCoordinates[0] = new google.maps.LatLng(redStations[12].lat,redStations[12].longe);
         drawLines(flightPlanCoordinates);
+        drawLines(morePlanCoordinates);
     }
 
     else {
@@ -185,7 +191,20 @@ function addStationMarkers()
     }
 }
 
-function createMarker(station){
+function drawLines(flightPlanCoordinates) {
+
+    var flightPath = new google.maps.Polyline({
+    path: flightPlanCoordinates,
+    geodesic: true,
+    strokeColor: parsed.line,
+    strokeOpacity: 1.0,
+    strokeWeight: 2
+    });
+   
+    flightPath.setMap(map);
+}
+
+function createMarker(station) {
     var stationLoc = new google.maps.LatLng(station.lat, station.longe);
     var iconSource = "http://maps.google.com/mapfiles/kml/paddle/";
     
@@ -212,58 +231,35 @@ function createMarker(station){
 
 function makeTable(station) {
     var content = document.createElement("table");
+    content = station.name;
     content += "<table><tr><th>Line</th><th>Trip #</th><th>Destination</th><th>Time Remaining</th></tr>";
-    
+
     for (var i = 0; i < parsed.schedule.length; i++) {
-        content += '<tr><td>' + parsed.line + '</td><td>' + parsed.schedule[i].TripID + '</td><td>';
-        
-        for (var j = 0; j < parsed.schedule[i].Predictions.length) {
+        for (var j = 0; j < parsed.schedule[i].Predictions.length; j++) {
             if (parsed.schedule[i].Predictions[j].Stop == station.name) { 
-                content += parsed.schedule[i].Destination + '</td><td>' + parsed.schedule[i].Predictions[j].Seconds + '</td></tr>';
+                content += "<tr><td>" + parsed.line + "</td><td>" + parsed.schedule[i].TripID + "</td><td>";
+                content += parsed.schedule[i].Destination + "</td><td>" + 
+                    formatSecs(parsed.schedule[i].Predictions[j].Seconds) + "</td></tr>";
             }
         }
     }
-    content += '</table>';
+    content += "</table>";
     if (content == "<table><tr><th>Line</th><th>Trip #</th><th>Destination</th><th>Time Remaining</th></tr></table>") {
-        content = document.createElement("p");
         content = "<p>No schedule of upcoming trains for this station.</p>";
     }
 
     return content;
 }
 
-
-
-
-function getArrivalSched(stationName) {
-    var secondsTillArival;
-    var destination;
-
-    for i in parsed.schedule {
-        destination = parsed.schedule.i.Destination;
-        secondsTillArival = parsed.schedule.i.Seconds;
+function formatSecs(seconds) {
+    seconds = Math.round(seconds);
+    var minutes = seconds / 60;
+    minutes = Math.round(minutes);
+    seconds = seconds % 60;
+    if (seconds < 10) {
+        seconds = "0" + seconds;
     }
-
+    return minutes + ":" + seconds;
 }
-
-//display marker info 
-
-//addString = "<tr><td>" + line + "</td></tr>"
-
-function drawLines(flightPlanCoordinates) {
-
-    var flightPath = new google.maps.Polyline({
-    path: flightPlanCoordinates,
-    geodesic: true,
-    strokeColor: parsed.line,
-    strokeOpacity: 1.0,
-    strokeWeight: 2
-    });
-   
-    flightPath.setMap(map);
-}
-
-
-
 
 
