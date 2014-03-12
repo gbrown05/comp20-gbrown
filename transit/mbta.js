@@ -100,16 +100,14 @@ function initialize() {
 // Handle the request
 function callback() {
     if (request.readyState == 4 && request.status == 200) {
-        
-        parsed = JSON.parse(request.responseText);
-        
+        parsed = JSON.parse(request.responseText);        
         if (parsed.line) {
             getCurrentLocation();
         }
     
     } else if (request.status == 500) {
         var errorElem = document.getElementById("mbtamap");
-        errorElem.innerHTML = "<h1>Could not load MBTA Map -- The T sucks!</h>";
+        errorElem.innerHTML = "<h1>Error: Could not load MBTA Map</h>";
     }
 }
 
@@ -145,8 +143,8 @@ function renderMap() {
 
     marker.setMap(map);
 
-    infowindow.setContent("You are here. You are " + (0.621371 * closest.distance) + 
-    " miles from the closest station, which is " + closest.name);
+    infowindow.setContent("You are here, which is " + (0.621371 * closest.distance) + 
+    " miles from the closest " + parsed.line + " line station, " + closest.name + ".");
     infowindow.open(map, marker);
     
     google.maps.event.addListener(marker, 'click', function() {
