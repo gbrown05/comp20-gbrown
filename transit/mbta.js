@@ -108,7 +108,8 @@ function callback() {
     } else if (request.status == 500) {
         var errorElem = document.getElementById("mbtamap");
         errorElem.innerHTML = "<h1>Error: Could not load MBTA Map</h>";
-        errorElem.innerHTML += "<p>Try refreshing your browser :)</p>";
+        // Now, try again
+        setTimeout(initialize, 300);
     }
 }
 
@@ -275,9 +276,8 @@ function makeTable(station) {
 }
 
 function formatSecs(seconds) {
-    seconds = Math.round(seconds);
     var minutes = seconds / 60;
-    minutes = Math.round(minutes);
+    minutes = Math.floor(minutes);
     seconds = seconds % 60;
     if (seconds < 10) {
         seconds = "0" + seconds;
