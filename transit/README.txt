@@ -7,6 +7,9 @@ are not listed in order of the next departure. The info window containing the
 user's current location automatically pops up; it also reappears ifthe user
 clicks it after closing it.
 
+The page automatically completes another XMLHttpRequest is it receives a 500
+error (recursing until it doesn't get an error).
+
 I collaborated briefly with Siddhartha Prasad early on regarding the 
 XMLHttpRequest. I also spoke about the Haversine formula with Skyler Tom, and
 helped Nadav Gavrielov a little bit with parsing the JSON.
@@ -18,3 +21,5 @@ Google Maps API tutorial was very handy as well.
 I spent about 12-14 hours on this assignment. But I really have no idea, because
 there were a lot of times that I just opened my computer and worked for a few
 minutes on the assignment.
+
+If I were to continue working on this, I would consider sorting departure times.
