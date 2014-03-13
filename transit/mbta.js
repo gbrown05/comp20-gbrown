@@ -109,7 +109,7 @@ function callback() {
         var errorElem = document.getElementById("mbtamap");
         errorElem.innerHTML = "<h1>Error: Could not load MBTA Map</h>";
         // Now, try again
-        errorElem.innerHTML = "<p>Reloading. . .</p>";
+        errorElem.innerHTML += "<p>Reloading. . .</p>";
         setTimeout(initialize, 300);
     }
 }
