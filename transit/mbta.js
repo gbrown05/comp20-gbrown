@@ -146,12 +146,12 @@ function renderMap() {
 
     marker.setMap(map);
 
-    infowindow.setContent("You are here, which is " + (0.621371 * closest.distance) + 
+    infowindow.setContent("You are here, which is " + (Math.round((0.621371 * closest.distance) * 100) / 100) + 
     " miles from the closest " + parsed.line + " line station, " + closest.name + ".");
     infowindow.open(map, marker);
     
     google.maps.event.addListener(marker, 'click', function() {
-        infowindow.setContent("You are here. You are " + (0.621371 * closest.distance) + 
+        infowindow.setContent("You are here. You are " + (Math.round((0.621371 * closest.distance) * 100) / 100) + 
             " miles from the closest " + parsed.line + " line station, which is " + closest.name);
         infowindow.open(map, marker);
     });
@@ -259,7 +259,7 @@ function createMarker(station) {
 
 function makeTable(station) {
     var content = document.createElement("table");
-    content = station.name;
+    content = station.name + " (" + (Math.round(((0.621371) * calcDist(station)) * 100) / 100) + " miles away from you)";
     content += "<table><tr><th>Line</th><th>Trip #</th><th>Destination</th><th>Time Remaining</th></tr>";
 
     // Now, go through the parsed JSON to get upcoming wait times and desitnations
@@ -306,6 +306,7 @@ function calcDist(stations) {
                     Math.sin(dLon/2) * Math.sin(dLon/2);  
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
     var d = R * c; 
+    d = (Math.round(d * 100) / 100);
 
     return d;
 }
