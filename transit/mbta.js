@@ -1,7 +1,7 @@
 // mbta.js
 // George Brown, Comp 20, 14 March 2014
 
-var request = new XMLHttpRequest();
+var request;
 
 var lat = 0;
 var longe = 0;
@@ -88,6 +88,7 @@ redStations[14] = {"name":"Wollaston","lat":"42.2665139","longe":"-71.0203369"};
 
 function initialize() {
     // Set up the request
+    request = new XMLHttpRequest();
     request.open("GET", "http://mbtamap.herokuapp.com/mapper/rodeo.json", true);
 
     // Execute the request
@@ -105,13 +106,15 @@ function callback() {
             getCurrentLocation();
         }
     
-    } else if (request.status == 500) {
+    } else if (request.status == 500 && request.readyState == 4) {
         var errorElem = document.getElementById("mbtamap");
         errorElem.innerHTML = "<h1>Error: Could not load MBTA Map</h>";
-        errorElem.innerHTML += "<p>Try reloading the page :)</p>";
-        // Now, try again -- commented out due to invalidstate error on Safari
-        // errorElem.innerHTML += "<p>Reloading. . .</p>";
-        // setTimeout(initialize, 300);
+        errorElem.innerHTML += "<p>Reloading. . .</p>";
+        // Now, try again
+        setTimeout(initialize, 300);
+    } else {
+        var errorElem = document.getElementById("mbtamap");
+        errorElem.innerHTML += "<p>Error: Try reloading the page</p>";
     }
 }
 
