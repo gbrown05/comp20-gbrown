@@ -112,9 +112,6 @@ function callback() {
         errorElem.innerHTML += "<p>Reloading. . .</p>";
         // Now, try again
         setTimeout(initialize, 300);
-    } else {
-        var errorElem = document.getElementById("mbtamap");
-        errorElem.innerHTML += "<p>Error: Try reloading the page</p>";
     }
 }
 
