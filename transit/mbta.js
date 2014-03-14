@@ -108,9 +108,10 @@ function callback() {
     } else if (request.status == 500) {
         var errorElem = document.getElementById("mbtamap");
         errorElem.innerHTML = "<h1>Error: Could not load MBTA Map</h>";
-        // Now, try again
-        errorElem.innerHTML += "<p>Reloading. . .</p>";
-        setTimeout(initialize, 300);
+        errorElem.innerHTML += "<p>Try reloading the page :)</p>";
+        // Now, try again -- commented out due to invalidstate error on Safari
+        // errorElem.innerHTML += "<p>Reloading. . .</p>";
+        // setTimeout(initialize, 300);
     }
 }
 
