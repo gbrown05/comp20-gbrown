@@ -30,15 +30,8 @@
 		//Finally, add the update at the top of the "status" div
 		document.getElementById("status").insertBefore(paragraph, 
 			document.getElementById("status").firstChild);
-
-		store();
-	}
-
-	function init()
-	{
-		localStorage.setItem("msg", "toPrint");
-		elem = document.getElementById("status");
-		elem.innerHTML = "<p>"localStorage["msg"] + "</p>";
+		localStorage[new Date().getTime()] = toPrint;
+		reload();
 	}
 
 	function reload()
@@ -46,23 +39,16 @@
 		elem = document.getElementById("status");
 		output = "";
 		for (key in localStorage) {
-			output = output + "<p>" + localStorage[key] + "</p>\n";
+			output = "<p>" + localStorage[key] + "</p>\n" + output;
 		}
 		elem.innerHTML = output;
-	}
-		
-	function store()
-	{
-		txt = document.getElementById("msg").value;
-		localStorage[new Date().getTime()] = txt;
-		reload();
 	}
 	</script> 
 
 
 </head>
 
-<body onload="init()">
+<body onload="reload()">
 	<h1>Fecebook</h1>
 	<div id="nav">
 		<ul>
