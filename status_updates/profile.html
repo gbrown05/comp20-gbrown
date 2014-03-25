@@ -33,7 +33,23 @@
 		//Finally, add the update at the top of the "status" div
 		document.getElementById("status").insertBefore(paragraph, 
 			document.getElementById("status").firstChild);
-	}
+
+		function reload(){
+			elem = document.getElementById("results");
+			output = "";
+			for (key in localStorage) {
+				output = output + "<p>" + localStorage[key] + "</p>\n";
+			}
+			elem.innerHTML = output;
+		}
+	
+		function store()
+		{
+			txt = document.getElementById("something").value;
+			localStorage[new Date().getTime()] = txt;
+			reload();
+		}
+		}
 	</script> 
 
 
