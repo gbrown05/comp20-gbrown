@@ -1,3 +1,17 @@
+Lab 7 (Part 1)
+
+Lab 5 has been modified so messages are stored in local storage.
+
+The functionality is the same (on Chrome; Firefox is a little buggy). Now, when
+you leave the page and return, messages from before appear: this is because they
+are being stored using localStorage.
+
+I also added a simple hack to clear the text field on change.
+
+***********************************************
+
+
+
 Lab 5 -- DOM
 George Brown, 18 February 2014
 
