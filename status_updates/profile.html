@@ -7,6 +7,7 @@
 	function statusUpdate()
 	{
 		//First, get the message and date/time
+		var clearField = document.getElementById("msg");
 		var message = document.getElementById("msg").value;
 		var date = new Date();
 		var month = date.getMonth() + 1;
@@ -20,7 +21,6 @@
 		var goodDate = month + "/" + day + "/" + year + " " + 
 			hour + ":" + minute;
 		var toPrint = goodDate + " - " + message;
-
 		//Now, create paragraph that will be added
 		var paragraph = document.createElement("p");
 		var update = document.createTextNode(toPrint);
@@ -32,6 +32,7 @@
 			document.getElementById("status").firstChild);
 		localStorage[new Date().getTime()] = toPrint;
 		reload();
+		clearField.value = "";
 	}
 
 	function reload()
