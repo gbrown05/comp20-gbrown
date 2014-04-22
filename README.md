@@ -1,9 +1,7 @@
 comp20-gbrown
 =============
 
-# COMP 20 Spring 2014 
-
-## Private Repo for George Brown
+## Private Repo for George Brown, Comp 20, Spring '14
 
 ### Purpose
 
