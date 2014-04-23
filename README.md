@@ -5,7 +5,7 @@ comp20-gbrown
 
 #### Purpose
 
-This repository contains my work from COMP 20 -- Web Programming in Spring 2014, taught by Ming Chow.
+This repository contains my work from COMP 20: Web Programming in Spring 2014 at Tufts University, taught by [Ming Chow](http://mchow01.github.io).
 
 #### Favorite Assignment
 
