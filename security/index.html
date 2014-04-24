@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>Comp 20 Assignment 5: Security Assessment</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+	<meta name="description" content="Security assessment" />
+	<meta name="keywords" content="george brown, computer science, security, tufts" />
+	<link rel="stylesheet" href="style/bootstrap.css" type="text/css" />
+	<link rel="stylesheet" href="style/style.css" type="text/css" />
+</head>
+
+<body>
+	<h1 class="pager">Security Assessment of 2048 Gamecenter</h1>
+	
+	<h2 class="pager">George Brown, April 2014, Comp 20 Assignment #5</h2>
+	
+	<h3>Introduction</h3>
+	<div class="horizline"></div>
+	<h3>Methodology</h3>
+	<div class="horizline"></div>
+
+
+	<h3>Abstract of Findings</h3>
+	<div class="horizline"></div>
+
+	<h3>Issues Found &amp; Technical Analysis</h3>
+	<div class="horizline"></div>
+		<h4>Initial Phase: Black Box Testing</h4>
+			<h5>Issue #1 - XSS (Cross-Site Scripting)</h5>
+			<ul>
+				<li><p class="descr">Location of Vulnerability:</p>
+					<p>Any GET API - in this case, the root and /scores.json</p>
+				
+				<li><p class="severity">Severity: Very High</p>
+				<p>This threat is severe due to the ease of exploitation and the potentially far-reaching effects of an attack. Not only can an attacker post anything to the site, but he/she could also redirect visitors to a harmful website. All data in the GET APIs could be tampered with, meaning that anyone relying on the API could also be affected by an attack.</p>
+				
+				<li><p class="descr">Description:</p>
+					<p>I found this issue by black box testing the application using the cURL tool. As I made a similar application, I had an idea that curling malicious code could be an effective attack.</p>
+
+					<p>Cross-site scripting allows the attacker to inject Javascript or HTML via the POST API -- in this case, submit.json. Because user input is not validated sufficiently, my attack succeeded in embedding a video of a baby monkey riding backwards on a pig. This video now shows up for anyone who accesses the homepage of the web application.</p>
+
+					<p>I simply ran the following command:</p>
+					<code>curl --data "username=&lt;iframe width='560' height='315' src='//www.youtube.com/embed/5_sfnQDr1-o?autoplay=1' frameborder='0' allowfullscreen&gt;&lt;/iframe&gt;&amp;score=650650650650&amp;grid=babymoney!" http://sleepy-atoll-6532.herokuapp.com/submit.json</code>
+					<br><br>
+					<p>And the result:</p>
+					<img class="containter" src="images/babymonkey.png" alt="babymoney!">
+
+				<li><p class="descr">Resolution:</p>
+					<p>We can resolve this issue by sanitizing/validating user input. This could be done a variety of ways. My solution includes installing a Node.js module called validator, and calling a function called sanitize. Here are the relevant lines of code:</p>
+					<code>var sanitizeInput = require("validator").sanitize;</code>
+					<br><br>
+					<p>And then, in all POST APIs, call this function along with the Javascript escape function. For example:</p>
+					<code>username = sanitize(request.body.username).escape();</code>
+        	</ul>
+        	<h5>Issue #2 - 
+
+
+
+        <h4>Secondary Phase: White Box Testing and Source Code Analysis</h4>
+
+	<h3>Conclusion</h3>
+	<div class="horizline"></div>
+</body>
+</html>
