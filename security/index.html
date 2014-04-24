@@ -54,7 +54,27 @@
 					<p>And then, in all POST APIs, call this function along with the Javascript escape function. For example:</p>
 					<code>username = sanitize(request.body.username).escape();</code>
         	</ul>
-        	<h5>Issue #2 - 
+        	<h5>Issue #2 - NoSQL Injection (PHP)</h5>
+        	<ul>
+        		<li><p class="descr">Location of Vulnerability:</p>
+        			<p>scores.json GET API</p>
+
+        		<li><p class="severity">Severity: Moderate</p>
+					<p>By injecting a few characters, we can perform a GET request that queries the entire database and returns everything. In this case, the homepage of the web application already returns all of the scores in the database. However, if the database contained other fields or sensitive information, this could be an even more severe threat.</p> 
+
+				<li><p class="descr">Description:</p>
+					<p>This type of injection is <a href="http://youtu.be/lcO1BTNh8r8?t=9m19s">possible</a> by inserting a few characters into the query, which tell the database to search for everything <em>not</em> equal to the search parameter. For example, going to the URL
+					<code>http://sleepy-atoll-6532.herokuapp.com/scores.json?username[$ne]=XXX</code> returns every document in the database that does not have the username <code>XXX</code>.
+
+					<br><br>
+					<p>Example:</p>
+					<img class="containter" src="images/nosqlinj.png" alt="dollarne">
+
+				<li><p class="descr">Resolution:</p>
+					<p>
+
+				<li><font class="descr">Side note:</font> I haven't looked at the source code yet, but there is a key, <code>__v</code>, that seems to be unused in this web application. While the present of this extra key in all documents is not a security vulnerability by itself, it is very inefficient.
+        	</ul>
 
 
 
