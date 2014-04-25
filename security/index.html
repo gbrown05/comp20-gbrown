@@ -34,7 +34,7 @@
 					<p>Any GET API - in this case, the root and /scores.json</p>
 				
 				<li><p class="severity">Severity: Very High</p>
-				<p>This threat is severe due to the ease of exploitation and the potentially far-reaching effects of an attack. Not only can an attacker post anything to the site, but he/she could also redirect visitors to a harmful website. All data in the GET APIs could be tampered with, meaning that anyone relying on the API could also be affected by an attack.</p>
+				<p>This threat is severe due to the ease of exploitation and the potentially far-reaching effects of an attack. Not only can an attacker post anything to the site, but he/she could also redirect visitors to a harmful website. All data in the GET APIs could be tampered with, meaning that anyone relying on the scores.json API could also be affected by an attack.</p>
 				
 				<li><p class="descr">Description:</p>
 					<p>I found this issue by black box testing the application using the cURL tool. As I made a similar application, I had an idea that curling malicious code could be an effective attack.</p>
@@ -45,8 +45,8 @@
 					<code>curl --data "username=&lt;iframe width='560' height='315' src='//www.youtube.com/embed/5_sfnQDr1-o?autoplay=1' frameborder='0' allowfullscreen&gt;&lt;/iframe&gt;&amp;score=650650650650&amp;grid=babymoney!" http://sleepy-atoll-6532.herokuapp.com/submit.json</code>
 					<br><br>
 					<p>And the result:</p>
-					<img class="containter" src="images/babymonkey.png" alt="babymoney!">
-
+					<p><img class="containter" src="images/before.png" width="474" alt="before">
+					<img class="containter" src="images/babymonkey.png" width="500" alt="babymonkey!"></p>
 				<li><p class="descr">Resolution:</p>
 					<p>We can resolve this issue by sanitizing/validating user input. This could be done a variety of ways. My solution includes installing a Node.js module called validator, and calling a function called sanitize. Here are the relevant lines of code:</p>
 					<code>var sanitizeInput = require("validator").sanitize;</code>
@@ -59,7 +59,7 @@
         		<li><p class="descr">Location of Vulnerability:</p>
         			<p>scores.json GET API</p>
 
-        		<li><p class="severity">Severity: Moderate</p>
+        		<li><p class="mod">Severity: Moderate</p>
 					<p>By injecting a few characters, we can perform a GET request that queries the entire database and returns everything. In this case, the homepage of the web application already returns all of the scores in the database. However, if the database contained other fields or sensitive information, this could be an even more severe threat.</p> 
 
 				<li><p class="descr">Description:</p>
@@ -68,12 +68,12 @@
 
 					<br><br>
 					<p>Example:</p>
-					<img class="containter" src="images/nosqlinj.png" alt="dollarne">
+					<img class="containter" src="images/nosqlinj.png" width="650" alt="dollarne">
 
 				<li><p class="descr">Resolution:</p>
-					<p>
+					<p>ENTER RESOLUTION HERE.</p>
 
-				<li><font class="descr">Side note:</font> I haven't looked at the source code yet, but there is a key, <code>__v</code>, that seems to be unused in this web application. While the present of this extra key in all documents is not a security vulnerability by itself, it is very inefficient.
+				<li><font class="descr">Side note:</font> I haven't looked at the source code yet, but there is a key, <code>__v</code>, that seems to be unused in this web application. While the presence of this extra key in all documents is not a security vulnerability by itself, it is very inefficient.
         	</ul>
 
 

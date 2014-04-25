@@ -11,6 +11,16 @@ h1 {
 	font-weight: bold;
 }
 
+.mod {
+    color: orange;
+    font-weight: bold;
+}
+
+.low {
+    color: blue;
+    font-weight: bold;
+}
+
 .horizline {
     min-height: 1px;
     clear: both; 
@@ -24,4 +34,21 @@ h1 {
 
 .descr {
 	font-weight: bold;
+}
+
+h4 {
+    font-size: 20px;
+}
+
+h5 {
+    font-size: 18px;
+    font-style: italic;
+}
+
+img {
+    padding: 5px;
+    border: 4px;
+    border-style: dotted;
+    border-color: gray;
+    border-radius: 2px;
 }
