@@ -20,7 +20,7 @@
 	<div class="horizline"></div>
 	<h3>Methodology</h3>
 	<div class="horizline"></div>
-
+	<p>In order to test the security and find the most threatening vulnerabilities, I performed two stages of testing. First, I black box tested the application using simple tools such as cURL. During this stage, I used my knowledge of the requirements of the web application's requirements 
 
 	<h3>Abstract of Findings</h3>
 	<div class="horizline"></div>
@@ -68,7 +68,7 @@
 
 					<br><br>
 					<p>Example:</p>
-					<img class="containter" src="images/nosqlinj.png" width="650" alt="dollarne">
+					<img class="containter" src="images/nosqlinj.png" width="750" alt="dollarne">
 
 				<li><p class="descr">Resolution:</p>
 					<p>ENTER RESOLUTION HERE.</p>
@@ -79,6 +79,28 @@
 
 
         <h4>Secondary Phase: White Box Testing and Source Code Analysis</h4>
+        <h5>Issue #3 - </h5>
+
+        <h5>Issue #4 - Denial of Service</h5>
+        <ul>
+        		<li><p class="descr">Location of Vulnerability:</p>
+        			<p>submit.json POST API</p>
+
+        		<li><p class="severity">Severity: High</p>
+					 <p>A denial of service is relatively simple and can bring down the entire application. While this attack does not alter or access data previously stored in the database, it is easy to orchestrate and results in (usually temporary, until the database is cleansed) application downtime.</p>
+
+				<li><p class="descr">Description:</p>
+					<p>As I reviewed the code in <code>web.js</code>, it became apparent that there is no validation on the input or rate limiting. Anyone can POST to submit.json an unlimited number of times and the POST will succeed as long as the fields <code>username</code>, <code>score</code>, and <code>grid></code> are included. This can ultimately overflow the database, because no database is infinite. In this case, the MongoDB used on Heroku with the MongoLab addon can support up to half a gigabyte of data. _______________</p>
+
+					<br><br>
+					<p>Example:</p>
+					<img class="containter" src="images/nosqlinj.png" width="750" alt="dollarne">
+
+				<li><p class="descr">Resolution:</p>
+					<p>ENTER RESOLUTION HERE.</p>
+
+				<li><font class="descr">Side note:</font> I haven't looked at the source code yet, but there is a key, <code>__v</code>, that seems to be unused in this web application. While the presence of this extra key in all documents is not a security vulnerability by itself, it is very inefficient.
+        	</ul>
 
 	<h3>Conclusion</h3>
 	<div class="horizline"></div>
