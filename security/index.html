@@ -18,13 +18,18 @@
 	
 	<h3>Introduction</h3>
 	<div class="horizline"></div>
+	I have been asked to perform a security assessment of Krishna Soni's 2048 Gamecenter <a href="http://sleepy-atoll-6532.herokuapp.com/" target="_blank">application</a>. The application was developed to provide an API to submit high scores (with an attached username and end grid) for the game <a href="http://gabrielecirulli.github.io/2048/" target="_blank">2048</a> via a POST request (submit.json). The application also includes two GET APIs, one that retrieves all scores and grids for a specified user (scores.json) and one that displays overall high score information in HTML. I provide an overview of vulnerabilities, how they could be exploited, and some simple ways to go about fixing them.</p>
+
+	<p>This report is intended only to provide a summary of a few of the biggest security issues and is by no means all-inclusive. All web applications are vulnerable to attacks, and nothing is 100% secure. With this in mind, the following report focuses on a few glaring issues that should be addressed immediately.</p>
 	<h3>Methodology</h3>
 	<div class="horizline"></div>
-	<p>In order to test the security and find the most threatening vulnerabilities, I performed two stages of testing. First, I black box tested the application using simple tools such as cURL. During this stage, I used my knowledge of the requirements of the web application's requirements 
+	<p>In order to test the security and find the most threatening vulnerabilities, I performed two stages of testing. First, I black box tested the application using simple open-source tools such as cURL. During this stage, I also used my knowledge of the requirements of the web application's requirements.</p>
+	<p>In the second stage, I analyzed the source code of the web application. 
 
 	<h3>Abstract of Findings</h3>
 	<div class="horizline"></div>
-
+	<p>The three issues that I detail below are significant threats to the security of 2048 Gamecenter. All of them can be fixed relatively easily, and I have provided possible solutions within the report. The first two issues exist because a user's input is not rigorously checked for malicious content, and the last issue comes from allowing anyone to add unlimited content to the database.</p>
+	<p>
 	<h3>Issues Found &amp; Technical Analysis</h3>
 	<div class="horizline"></div>
 		<h4>Initial Phase: Black Box Testing</h4>
@@ -71,9 +76,9 @@
 					<img class="containter" src="images/nosqlinj.png" width="750" alt="dollarne">
 
 				<li><p class="descr">Resolution:</p>
-					<p>The solution here is the same as the first issue: We must sanitize user input to assure that no maliscious queries are allowed.</p>
+					<p>The solution here is the same as the first issue: We must sanitize user input to assure that no malicious queries are allowed.</p>
 
-				<li><font class="descr">Side note:</font> I haven't looked at the source code yet, but there is a key, <code>__v</code>, that seems to be unused in this web application. While the presence of this extra key in all documents is not a security vulnerability by itself, it is very inefficient.
+				<li><font class="descr">Side Note:</font> I haven't looked at the source code yet, but there is a key, <code>__v</code>, that seems to be unused in this web application. While the presence of this extra key in all documents is not a security vulnerability by itself, it is very inefficient.
         	</ul>
 
 
@@ -85,20 +90,25 @@
         			<p>submit.json POST API</p>
 
         		<li><p class="severity">Severity: High</p>
-					 <p>A denial of service is relatively simple and can bring down the entire application. While this attack does not alter or access data previously stored in the database, it is easy to orchestrate. This DOS attack results in (usually temporary, until the database is cleansed) application downtime. It could also result in highly increased storage costs.</p>
+					 <p>A denial of service is relatively simple and can bring down the entire application. While this attack does not alter or access data previously stored in the database, it is easy to orchestrate. This DOS attack results in (usually temporary, until the database is cleansed) application downtime. It could also result in excessive database costs if there is no limit set.</p>
 
 				<li><p class="descr">Description:</p>
-					<p>As I reviewed the code in <code>web.js</code>, it became apparent that there is no validation on the input or rate limiting. Anyone can POST to submit.json an unlimited number of times and the POST will succeed as long as the fields <code>username</code>, <code>score</code>, and <code>grid</code> are included. This can ultimately overflow the database, because no database is infinite. In this case, the MongoDB used on Heroku with the MongoLab addon can support up to half a gigabyte of data. _______________</p>
+					<p>As I reviewed the code in <code>web.js</code>, it became apparent that there is no validation on the input or rate limiting. <em>Anyone</em> can POST to submit.json an unlimited number of times and the POST will succeed as long as the fields <code>username</code>, <code>score</code>, and <code>grid</code> are included. This can ultimately overflow the database, because no database is infinite. In this case, the MongoDB used on Heroku with the MongoLab addon can support up to half a gigabyte of data, so I simply needed to write a <a href="scripts/overflow.sh">script</a> that posted at least 512 MB of data.</p>
 
-					<br><br>
 					<p>Example:</p>
 					<img class="containter" src="images/nosqlinj.png" width="750" alt="dollarne">
 
 				<li><p class="descr">Resolution:</p>
-					<p>ENTER RESOLUTION HERE.</p>
+					<p>There are a few ways to resolve this issue. The simplest way is to restrict access to the POST API to only trusted domains. This can be done by replacing the wildcard character in this line of code:</p>
+						<code>response.header('Access-Control-Allow-Origin','*');</code><br><br>
+					<p>with the domain of a trusted user. Additionally, we could resolve the issue by creating <a href="http://en.wikipedia.org/wiki/Application_programming_interface_key" target="_blank">API keys</a> or by limiting the number of POST requests each domain is allowed to have. This can be done simply by keeping track of the number of POSTs from each domain.</p>
+				<li><font class="descr">Side Note:</font> Simply limiting the number of POST requests from each domain would probably not protect against a <em>distributed</em> denial of service on this API. And a DDoS is always possible on the publicly accessible GET APIs, but this application is not likely to be a target for this type of large-scale attack.</p>
         </ul>
 
 	<h3>Conclusion</h3>
 	<div class="horizline"></div>
+	<p>Most of the issues I've outlined above are due to insufficient validation of user input and the fact that cross-origin resource sharing is universally and allowed. These issues can and should be fixed easily and quickly.</p>
+
+	<p>Of course, there are other vulnerabilities in 2048-Gamecenter that are not discussed above. Because this application does not contain highly confidential information, using a NoSQL database like Mongo is sufficient.
 </body>
 </html>
