@@ -18,7 +18,7 @@
 	
 	<h3>Introduction</h3>
 	<div class="horizline"></div>
-	I have been asked to perform a security assessment of Krishna Soni's 2048 Gamecenter <a href="http://sleepy-atoll-6532.herokuapp.com/" target="_blank">application</a>. The application was developed to provide an API to submit high scores (with an attached username and end grid) for the game <a href="http://gabrielecirulli.github.io/2048/" target="_blank">2048</a> via a POST request (submit.json). The application also includes two GET APIs, one that retrieves all scores and grids for a specified user (scores.json) and one that displays overall high score information in HTML. I provide an overview of vulnerabilities, how they could be exploited, and some simple ways to go about fixing them.</p>
+	<p>I have been asked to perform a security assessment of Krishna Soni's 2048 Gamecenter <a href="http://sleepy-atoll-6532.herokuapp.com/" target="_blank">application</a>. The application was developed to provide an API to submit high scores (with an attached username and end grid) for the game <a href="http://gabrielecirulli.github.io/2048/" target="_blank">2048</a> via a POST request (submit.json). The application also includes two GET APIs, one that retrieves all scores and grids for a specified user (scores.json) and one that displays overall high score information in HTML. I provide an overview of vulnerabilities, how they could be exploited, and some simple ways to go about fixing them.</p>
 
 	<p>This report is intended only to provide a summary of a few of the biggest security issues and is by no means all-inclusive. All web applications are vulnerable to attacks, and nothing is 100% secure. With this in mind, the following report focuses on a few glaring issues that should be addressed immediately.</p>
 	<h3>Methodology</h3>
@@ -78,7 +78,8 @@
 				<li><p class="descr">Resolution:</p>
 					<p>The solution here is the same as the first issue: We must sanitize user input to assure that no malicious queries are allowed.</p>
 
-				<li><font class="descr">Side Note:</font> I haven't looked at the source code yet, but there is a key, <code>__v</code>, that seems to be unused in this web application. While the presence of this extra key in all documents is not a security vulnerability by itself, it is very inefficient.
+				<li><p class="descr">Side Note:</p> 
+					<p>I haven't looked at the source code yet, but there is a key, <code>__v</code>, that seems to be unused in this web application. While the presence of this extra key in all documents is not a security vulnerability by itself, it is very inefficient.</p>
         	</ul>
 
 
@@ -102,13 +103,16 @@
 					<p>There are a few ways to resolve this issue. The simplest way is to restrict access to the POST API to only trusted domains. This can be done by replacing the wildcard character in this line of code:</p>
 						<code>response.header('Access-Control-Allow-Origin','*');</code><br><br>
 					<p>with the domain of a trusted user. Additionally, we could resolve the issue by creating <a href="http://en.wikipedia.org/wiki/Application_programming_interface_key" target="_blank">API keys</a> or by limiting the number of POST requests each domain is allowed to have. This can be done simply by keeping track of the number of POSTs from each domain.</p>
-				<li><font class="descr">Side Note:</font> Simply limiting the number of POST requests from each domain would probably not protect against a <em>distributed</em> denial of service on this API. And a DDoS is always possible on the publicly accessible GET APIs, but this application is not likely to be a target for this type of large-scale attack.</p>
+				<li><p class="descr">Side Note:</p> 
+					<p>Simply limiting the number of POST requests from each domain would probably not protect against a <em>distributed</em> denial of service on this API. And a DDoS is always possible on the publicly accessible GET APIs, but this application is not likely to be a target for this type of large-scale attack.</p>
         </ul>
 
 	<h3>Conclusion</h3>
 	<div class="horizline"></div>
-	<p>Most of the issues I've outlined above are due to insufficient validation of user input and the fact that cross-origin resource sharing is universally and allowed. These issues can and should be fixed easily and quickly.</p>
+	<p>Most of the issues I've outlined above are due to insufficient validation of user input and the fact that cross-origin resource sharing is universally enabled and allowed. These issues can and should be fixed easily and quickly.</p>
 
-	<p>Of course, there are other vulnerabilities in 2048-Gamecenter that are not discussed above. Because this application does not contain highly confidential information, using a NoSQL database like Mongo is sufficient.
+	<p>Of course, there are other vulnerabilities in 2048-Gamecenter that are not discussed above. There is almost no built-in security for Mongo; however, because this application does not contain highly confidential information, using a NoSQL database like Mongo is sufficient. SSL encryption is another security feature that could be explored, but for the same reason -- that is, because of the nature and goals of this application -- it is out of the scope of this report.</p>
+
+	<p>After these fixes are made, a follow-up security assessment, as well as a re-evaluation of the goals of this application, should be made. <a href="mailto:george.brown@tufts.edu">I can help</a> with both of these.</p>
 </body>
 </html>
