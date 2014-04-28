@@ -98,14 +98,14 @@
 					<p>As I reviewed the code in <code>web.js</code>, it became apparent that there is no validation on the input or rate limiting. <em>Anyone</em> can POST to submit.json an unlimited number of times and the POST will succeed as long as the fields <code>username</code>, <code>score</code>, and <code>grid</code> are included. This can ultimately overflow the database, because no database is infinite. In this case, the MongoDB used on Heroku with the MongoLab addon can support up to half a gigabyte of data, so I simply needed to write a <a href="scripts/overflow.sh">script</a> that posted at least 512 MB of data.</p>
 
 					<p>Example:</p>
-					<img class="containter" src="images/nosqlinj.png" width="750" alt="dollarne">
+					<img class="containter" src="images/overflow.png" width="750" alt="overflow error">
 
 				<li><p class="descr">Resolution:</p>
 					<p>There are a few ways to resolve this issue. The simplest way is to restrict access to the POST API to only trusted domains. This can be done by replacing the wildcard character in this line of code:</p>
 						<code>response.header('Access-Control-Allow-Origin','*');</code><br><br>
 					<p>with the domain of a trusted user. Additionally, we could resolve the issue by creating <a href="http://en.wikipedia.org/wiki/Application_programming_interface_key" target="_blank">API keys</a> or by limiting the number of POST requests each domain is allowed to have. This can be done simply by keeping track of the number of POSTs from each domain.</p>
 				<li><p class="descr">Side Note:</p> 
-					<p>Simply limiting the number of POST requests from each domain would probably not protect against a <em>distributed</em> denial of service on this API. And a DDoS is always possible on the publicly accessible GET APIs, but this application is not likely to be a target for this type of large-scale attack.</p>
+					<p>Simply limiting the number of POST requests from each domain would probably not protect against a <em>distributed</em> denial of service attack on this API. And a DDoS is always possible on the publicly accessible GET APIs, but this application is not likely to be a target for this type of large-scale attack.</p>
         </ul>
 
 	<h3>Conclusion</h3>
